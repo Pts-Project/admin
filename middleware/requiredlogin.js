@@ -16,7 +16,7 @@ module.exports=(req,res,next)=>{
 
 
      }
-     const token=authorization.replace("bearer","")
+     const token=authorization.replace("Bearer","")
      jwt.verify(token,JWTSECRET,(err,payload)=>{
           if(err){
                  return res.status(401).json({err})

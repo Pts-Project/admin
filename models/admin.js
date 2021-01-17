@@ -19,6 +19,7 @@ const    adminSchema = new mongoose.Schema({
            required:true
       },
       date: { type: Date, default: Date.now,required:false},
+       designation:{ type:String, required:true},
       contactnumber:{
           type:String,
           required:false

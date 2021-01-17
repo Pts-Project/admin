@@ -6,9 +6,14 @@ const { MONGOURI } = require('./keys')
 const { JWTSECRET } = require('./keys')
 require('./models/user')
 require('./models/events')
-require('./models/admin')
-require('./models/notification')
 
+
+
+
+
+
+
+require('./models/admin')
 
 
 
@@ -26,7 +31,7 @@ app.use(bodyParser.urlencoded({
 })); 
 
 app.use(require('./routes/auth'))
-mongoose.connect('mongodb://localhost:27017/file'
+mongoose.connect(    MONGOURI
     ,{
       useNewUrlParser:true, 
       useUnifiedTopology:true

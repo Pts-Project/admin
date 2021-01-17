@@ -6,7 +6,13 @@ const requiredlogin=require('../middleware/requiredlogin')
 const { JWTSECRET } = require('../keys')
 const router=express.Router()
 const User=mongoose.model("User")
-const Notification=mongoose.model("Notification")
+
+
+
+
+
+
+
 const Admin=mongoose.model("Admin")
 
 
@@ -24,7 +30,7 @@ const Event=mongoose.model("Event")
 var x=0;
 var y=0;
      router.post('/adduser',(req,res)=>{
-     const {name,email,password,id,date,skills} = req.body
+     const {name,email,password,contactnumber,id,date,skills} = req.body
 
 
 
@@ -45,6 +51,7 @@ var y=0;
                      id:x+1,
                       email,
                       password:hashedpassword,
+                        contactnumber                 ,
                       name,
                       date,
                         skills,
@@ -67,7 +74,7 @@ var y=0;
      })
 })
 router.post('/adminsignup',(req,res)=> {
-     const {name,email,password,date,id,skills} = req.body
+     const {name,email,password,designation,contactnumber,date,id,skills} = req.body
 
 
 
@@ -88,7 +95,9 @@ router.post('/adminsignup',(req,res)=> {
                      id:x+1,
                       email,
                       password:hashedpassword,
-                      name,
+                                                                                       designation,
+                                                                                        contactnumber,
+                      name                      ,
                       date,
                       skills
                  })
@@ -202,8 +211,8 @@ router.delete('/delete/user/:email',requiredlogin,(req,res)=>{
        })
 })
 router.post('/event/create',requiredlogin,(req,res)=>{
-     const{indexnumber,name,category,image,description}=req.body
-     if(!name||!brand||!category||!countinstock||!price||!description){
+     const{indexnumber,name,category,image,date,description}=req.body
+     if(!name||!category||!description){
             return res.status(422).json({error:"please add all the fields"})
       }
        Event.findOne({name:name})
@@ -213,7 +222,7 @@ router.post('/event/create',requiredlogin,(req,res)=>{
              }
              else{
                   const product = new Event({
-                    indexnumber:y+1,name,category,image    ,    description
+                    indexnumber:y+1,name,category,image    ,    description ,date
      
                  })
                        product.save()
@@ -255,64 +264,6 @@ router.delete('/delete/events',requiredlogin,(req,res)=>{
             }
             else{
                      return res.status(422).json({error:"event doesnt exist"})
-            }
-     })
-})
-                  
-router.post('/notification/create',requiredlogin,(req,res)=>{
-     const{indexnumber,name,category,image,description}=req.body
-     if(!name||!brand||!category||!countinstock||!price||!description){
-            return res.status(422).json({error:"please add all the fields"})
-      }
-      Notification.findOne({name:name})
-         .then(savedUser=>{
-             if(savedUser){
-                         return res.status(422).json({error:"notification already exist with that name"})                     
-             }
-             else{
-                  const product = new    Notification({
-                    indexnumber:y+1,name,category,image    ,    description
-     
-                           })
-                 product.save()
-                 .then(user=>{
-                      res.json({message:"saved succesfully"})
-                      y=y+1
-                 })
-                 .catch(err=>{
-                  console.log(err)
-             })
-          }
-
-              })
-             
-         })
-router.get('/notification',requiredlogin,(req,res)=>{
-      Notification.find().then(list=>{
-               res.json({list})
-        })
-        
-})
-router.get( '/notification/:id',requiredlogin,(req,res)=>{
-     indexnumber=req.params.id
-      Notification.findOne({indexnumber:indexnumber}).then(detail=>{
-                  if(!detail){
-                           return res.status(422).json({error:"can not find any notification  with this indexnumber"})
-                  }
-                   res.json({detail})
-
-       })
-})
-router.delete('/delete/notification',requiredlogin,(req,res)=>{
-          const name = req.body.name
-           Notification.findOne({name:name}).then(deleteproduct=>{
-            if(deleteproduct)
-            {
-                   deleteproduct.deleteOne()
-                   return res.json(({message:"deleted"}))
-            }
-            else{
-                     return res.status(422).json({error:"doesnt exist"})
             }
      })
 })
