@@ -133,7 +133,8 @@ router.post('/adminlogin',(req,res)=>{
 
        .then(doMatch=>{
             if(doMatch){
-                    const token =        jwt.sign({_id:savedUser._id},JWTSECRET)
+                    const token =        jwt.sign({_id:savedUser._id},JWTSECRET)  
+                    res.status(200).send("Authenticated")
                     res.json(token)
             }
             else
