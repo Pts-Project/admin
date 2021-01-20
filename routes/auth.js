@@ -126,21 +126,20 @@ router.post('/adminlogin',(req,res)=>{
  Admin.findOne({email:email})
  .then(savedUser=>{
       if(!savedUser){
-               return res.status(422).json({error:"invalid email or password"})
+          res.send("Invalid Username or Password")
       }
       bcrypt.compare(password,savedUser.password)
    
 
        .then(doMatch=>{
             if(doMatch){
-                    const token =        jwt.sign({_id:savedUser._id},JWTSECRET)  
-                    res.status(200).send("Authenticated")
-                    res.json(token)
+               const token =            jwt.sign({_id:savedUser._id},JWTSECRET)  
+               res.status(200).send("Authenticated")
+              
+            }else{
+               res.status(200).send("Authentication failed")
             }
-            else
-            {
-                 return res.status(422).json({error:"invalid email or password"})
-            }
+           
        }).catch(err=>{
         console.log(err)
  })
